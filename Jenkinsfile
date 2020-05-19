@@ -1,14 +1,12 @@
 pipeline {
-    agent {label 'MASTER'}
+    agent { label 'LINUX' }
+    triggers { pollSCM('* * * * *') }
     stages {
-        stage('Source'){
+        stage('clone and compile') {
             steps {
-                git 'https://github.com/GitPr-cticeRepo/gol-declarative.git' 
-            }
-        }
-        stage('Package'){
-            steps {
-                sh 'mvn package'
+                git branch: 'declarative', 
+                url: 'https://github.com/GitPr-cticeRepo/gol-declarative.git'
+                sh 'mvn compile'
             }
         }
     }
