@@ -5,7 +5,11 @@ pipeline {
             steps {
                 git 'https://github.com/GitPr-cticeRepo/gol-declarative.git' 
             }
-        
+        }
+        stage('Package'){
+            steps {
+                sh 'mvn package'
+            }
         }
     }
 }
