@@ -1,12 +1,19 @@
 pipeline {
-    agent { label 'LINUX' }
-    triggers { pollSCM('* * * * *') }
+    agent {label 'MASTER'}
+	triggers {
+	   upstream(upstreamProjects: 'dummy-fs', threshold: hudson.model.Result.SUCCESS)
+	}
     stages {
-        stage('clone and compile') {
+        stage('Source'){
             steps {
-                git branch: 'declarative', 
-                url: 'https://github.com/GitPr-cticeRepo/gol-declarative.git'
-                sh 'mvn compile'
+                git 'https://github.com/GitPr-cticeRepo/gol-declarative.git' 
+            }
+        }
+        stage('Package'){
+            steps {
+                sh 'mvn package'
+				input 'continue to next step?'
+				archiveArtifacts 'target/*.jar'
             }
         }
     }
